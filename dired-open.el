@@ -125,6 +125,13 @@ This only affects the built-in handlers."
   :type 'boolean
   :group 'dired-open)
 
+(defcustom dired-open-default-open-program "xdg-open"
+  "The default progroam to open file with external application.
+
+It should be `xdg-open' on Linux and `open' on macOS."
+  :type 'string
+  :group 'dired-open)
+
 
 (defun dired-open--start-process (file command)
   "Open FILE with COMMAND.
@@ -160,9 +167,9 @@ string as well."
 (defun dired-open-xdg ()
   "Try to run `xdg-open' to open the file under point."
   (interactive)
-  (if (executable-find "xdg-open")
+  (if (executable-find dired-open-default-open-program)
       (let ((file (ignore-errors (dired-get-file-for-visit))))
-        (call-process-shell-command (concat "xdg-open '" (file-truename file) "'"))
+        (call-process-shell-command (concat dired-open-default-open-program " '" (file-truename file) "'"))
     nil)))
 
 (defun dired-open-by-extension ()
